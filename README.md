@@ -79,7 +79,3 @@ dim_product[Product Card Id] 1 ── * fact_order_items[product_id]
 ## 技术栈
 
 Python (Pandas) · Power BI Desktop · DAX · 星型数据模型
-
-## 许可证
-
-MIT（数据集版权归原作者所有，请勿直接再分发原始 CSV）
