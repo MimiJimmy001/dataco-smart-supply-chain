@@ -1,0 +1,82 @@
+// ============================================================
+// DataCo 供应链看板 DAX 度量值
+// 在 Power BI 中: 建模 -> 新建度量值, 逐条粘贴
+// 约定: 事实表 fact_order_items, 维度表 dim_date/dim_customer/dim_product
+// ============================================================
+
+// ─── 基础度量 ───
+总销售额 = SUM(fact_order_items[sales])
+
+有效销售额 =
+CALCULATE([总销售额], fact_order_items[is_canceled] = FALSE())
+
+总利润 = SUM(fact_order_items[profit_per_order])
+
+有效利润 =
+CALCULATE([总利润], fact_order_items[is_canceled] = FALSE())
+
+订单数 = DISTINCTCOUNT(fact_order_items[order_id])
+
+有效订单数 =
+CALCULATE([订单数], fact_order_items[is_canceled] = FALSE())
+
+客户数 = DISTINCTCOUNT(fact_order_items[customer_id])
+
+平均客单价 = DIVIDE([有效销售额], [有效订单数])
+
+利润率 = DIVIDE([有效利润], [有效销售额])
+
+// ─── 交付绩效 ───
+// 交付口径: 剔除取消与欺诈订单
+交付订单数 =
+CALCULATE(COUNTROWS(fact_order_items),
+          fact_order_items[is_canceled] = FALSE())
+
+延迟订单数 =
+CALCULATE(COUNTROWS(fact_order_items),
+          fact_order_items[is_canceled] = FALSE(),
+          fact_order_items[is_late] = TRUE())
+
+延迟交付率 = DIVIDE([延迟订单数], [交付订单数])
+
+准时交付率 = 1 - [延迟交付率]
+
+平均发货天数 =
+CALCULATE(AVERAGE(fact_order_items[ship_days_real]),
+          fact_order_items[is_canceled] = FALSE())
+
+平均计划天数 =
+CALCULATE(AVERAGE(fact_order_items[ship_days_scheduled]),
+          fact_order_items[is_canceled] = FALSE())
+
+平均延迟偏差 =
+CALCULATE(AVERAGE(fact_order_items[ship_delay_days]),
+          fact_order_items[is_canceled] = FALSE())
+
+// ─── 趋势同比 ───
+销售额同比 =
+VAR cur = [有效销售额]
+VAR prev = CALCULATE([有效销售额], SAMEPERIODLASTYEAR(dim_date[date]))
+RETURN DIVIDE(cur - prev, prev)
+
+销售额环比 =
+VAR cur = [有效销售额]
+VAR prev = CALCULATE([有效销售额], PREVIOUSMONTH(dim_date[date]))
+RETURN DIVIDE(cur - prev, prev)
+
+// ─── 亏损分析 ───
+亏损订单数 =
+CALCULATE(COUNTROWS(fact_order_items),
+          fact_order_items[is_canceled] = FALSE(),
+          fact_order_items[profit_per_order] < 0)
+
+亏损订单占比 = DIVIDE([亏损订单数], [交付订单数])
+
+亏损金额 =
+CALCULATE([总利润],
+          fact_order_items[is_canceled] = FALSE(),
+          fact_order_items[profit_per_order] < 0)
+
+平均折扣率 =
+CALCULATE(AVERAGE(fact_order_items[discount_rate]),
+          fact_order_items[is_canceled] = FALSE())
