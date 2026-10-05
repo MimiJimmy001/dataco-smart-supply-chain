@@ -1,5 +1,9 @@
 # DataCo 供应链经营分析看板（Power BI）
 
+[![Syntax CI](https://github.com/MimiJimmy001/dataco-smart-supply-chain/actions/workflows/ci.yml/badge.svg)](https://github.com/MimiJimmy001/dataco-smart-supply-chain/actions/workflows/ci.yml)
+[![Power BI](https://img.shields.io/badge/Power%20BI-Dashboard-F2C811?logo=powerbi&logoColor=black)](SupplyChain-Dashboard.pbix)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 基于 Kaggle DataCo Smart Supply Chain 公开数据集（180,519 条订单明细、2015-2018 三年），
 完成从数据清洗、星型模型建模到 Power BI 交互式看板的全流程经营分析，覆盖
 **经营总览、交付绩效、品类利润、区域市场** 四大主题。
@@ -8,7 +12,7 @@
 
 | 项 | 说明 |
 |----|------|
-| 来源 | Kaggle: DataCo Smart Supply Chain for Big Data Analysis |
+| 来源 | [Kaggle: DataCo Smart Supply Chain for Big Data Analysis](https://www.kaggle.com/datasets/shashwatwork/dataco-smart-supply-chain-for-big-data-analysis) |
 | 规模 | 180,519 行 × 53 列，订单明细级 |
 | 跨度 | 2015-01 ~ 2018-01 |
 | 覆盖 | 62,897 张订单、20,261 名客户、118 种产品、5 大市场 |
@@ -16,7 +20,7 @@
 ## 快速开始
 
 ```bash
-pip install pandas
+pip install -r requirements.txt
 python prepare_data.py        # 清洗 + 星型建模, 输出 data/processed/ 四张表
 ```
 
