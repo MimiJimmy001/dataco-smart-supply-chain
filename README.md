@@ -10,6 +10,8 @@
 
 ## 项目内容导航
 
+- [可视化与可解释性](docs/VISUAL_GUIDE.md)：4 个以上 Mermaid 思维导图、流程图和指标解释
+
 - [项目案例研究](docs/CASE_STUDY.md)：业务问题、星型模型、四页看板、核心结论和面试讲解
 - [看板设计方案](docs/dashboard_design.md)：页面结构、视觉对象和交互设计
 - [DAX 度量值](dax/measures.dax)：指标口径与时间智能定义
